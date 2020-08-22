@@ -1,0 +1,33 @@
+name: Tests
+
+on: [ push ]
+
+jobs:
+  darwin:
+    name: Darwin
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v1
+      - run: xcodebuild -version
+      - run: sudo xcode-select -switch /Applications/Xcode_11.app
+      - run: xcodebuild -version
+      - run: xcrun simctl list
+      - run: ./gradlew iosX64Test macosX64Test tvosX64Test watchosX86Test
+  js:
+    name: JS
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - run: ./gradlew jsTest
+  jdk:
+    name: JDK ${{ matrix.java_version }}
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        java_version: [ '8', '9', '10', '11', '12', '13', '14' ]
+    steps:
+      - uses: actions/checkout@v1
+      - uses: actions/setup-java@v1
+        with:
+          java-version: ${{ matrix.java_version }}
+      - run: ./gradlew jvmTest
