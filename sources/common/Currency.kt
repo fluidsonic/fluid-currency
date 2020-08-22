@@ -5,7 +5,7 @@ public class Currency private constructor(
 	public val code: CurrencyCode,
 	public val defaultFractionDigits: Int,
 	public val name: String,
-	public val numericCode: Int
+	public val numericCode: Int,
 ) {
 
 	init {
