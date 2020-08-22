@@ -27,7 +27,7 @@ Usage
 -----
 
 ```kotlin
-println(Currency.fromCode("EUR").name) // 'Euro'
+println(Currency.fromCode("EUR").name) // Euro
 ```
 
 ### `class Currency`
