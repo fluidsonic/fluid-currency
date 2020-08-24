@@ -50,7 +50,6 @@ class CurrencyTests {
 
 		assertEquals(expected = eurCode, actual = eur.code)
 		assertEquals(expected = 2, actual = eur.defaultFractionDigits)
-		assertEquals(expected = "Euro", actual = eur.name)
 		assertEquals(expected = 978, actual = eur.numericCode)
 	}
 

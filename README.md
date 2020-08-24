@@ -7,7 +7,9 @@ fluid-currency
 [![Kotlin](https://img.shields.io/badge/Kotlin-1.4.0%20(Darwin,%20JVM,%20JS)-blue.svg)](https://github.com/JetBrains/kotlin/releases/v1.4.0)
 [![#fluid-libraries Slack Channel](https://img.shields.io/badge/slack-%23fluid--libraries-543951.svg?label=Slack)](https://kotlinlang.slack.com/messages/C7UDFSVT2/)
 
-Kotlin multiplatform `Currency` support.
+Kotlin multiplatform currency library.
+
+This is most useful in combination with [fluid-i18n](https://github.com/fluidsonic/fluid-i18n) for retrieving internationalized information about a currency.
 
 
 
@@ -27,7 +29,7 @@ Usage
 -----
 
 ```kotlin
-println(Currency.fromCode("EUR").name) // Euro
+println(Currency.fromCode("EUR")) // EUR
 ```
 
 ### `class Currency`
@@ -38,7 +40,6 @@ A class with information about a specific currency defined by [ISO 4217](https:/
 val currency = Currency.forCode("EUR") // throws if code is invalid (not defined by ISO 4217) or has an invalid format (not three latin letters)
 println(currency.code) // EUR
 println(currency.defaultFractionDigits) // 2
-println(currency.name) // Euro
 println(currency.numericCode) // 978
 ```
 
