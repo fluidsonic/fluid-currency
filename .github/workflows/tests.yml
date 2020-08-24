@@ -18,7 +18,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
-      - run: ./gradlew jsTest
+      - run: ./gradlew jsIrTest
   jdk:
     name: JDK ${{ matrix.java_version }}
     runs-on: ubuntu-latest
