@@ -1,5 +1,9 @@
 package io.fluidsonic.currency
 
+import kotlinx.serialization.*
+import kotlinx.serialization.descriptors.*
+import kotlinx.serialization.encoding.*
+
 
 /**
  * An ISO 4217 3-letter currency code, for example `EUR` or `USD`.
@@ -8,8 +12,21 @@ package io.fluidsonic.currency
  * - [https://www.iso.org/iso-4217-currency-codes.html]
  * - [https://www.currency-iso.org/en/home/tables/table-a1.html]
  */
-@Suppress("NON_PUBLIC_PRIMARY_CONSTRUCTOR_OF_INLINE_CLASS", "UNUSED_PARAMETER")
-public inline class CurrencyCode @PublishedApi internal constructor(private val value: String) {
+@Serializable(CurrencyCodeSerializer::class)
+public class CurrencyCode internal constructor(private val value: String) {
+
+	init {
+		freeze()
+	}
+
+
+	override fun equals(other: Any?): Boolean =
+		this === other || (other is CurrencyCode && value == other.value)
+
+
+	override fun hashCode(): Int =
+		value.hashCode()
+
 
 	public fun isValid(): Boolean =
 		Currency.forCodeOrNull(this) != null
@@ -37,4 +54,22 @@ public inline class CurrencyCode @PublishedApi internal constructor(private val 
 				string[1].isLatinLetter() &&
 				string[2].isLatinLetter()
 	}
+}
+
+
+@OptIn(ExperimentalSerializationApi::class)
+@Serializer(forClass = CurrencyCode::class)
+internal object CurrencyCodeSerializer : KSerializer<CurrencyCode> {
+
+	override val descriptor: SerialDescriptor =
+		PrimitiveSerialDescriptor("io.fluidsonic.currency.CurrencyCode", PrimitiveKind.STRING)
+
+
+	override fun serialize(encoder: Encoder, value: CurrencyCode) {
+		encoder.encodeString(value.toString())
+	}
+
+
+	override fun deserialize(decoder: Decoder): CurrencyCode =
+		CurrencyCode.parse(decoder.decodeString())
 }
