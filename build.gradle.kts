@@ -4,7 +4,7 @@ plugins {
 	id("io.fluidsonic.gradle") version "1.1.14"
 }
 
-fluidLibrary(name = "currency", version = "0.9.2")
+fluidLibrary(name = "currency", version = "0.9.3")
 
 fluidLibraryModule(description = "Kotlin multiplatform currency library") {
 	targets {
