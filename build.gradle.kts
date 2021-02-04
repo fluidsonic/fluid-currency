@@ -1,7 +1,8 @@
 import io.fluidsonic.gradle.*
+import org.jetbrains.kotlin.gradle.plugin.*
 
 plugins {
-	id("io.fluidsonic.gradle") version "1.1.14"
+	id("io.fluidsonic.gradle") version "1.1.18"
 }
 
 fluidLibrary(name = "currency", version = "0.9.3")
@@ -10,12 +11,14 @@ fluidLibraryModule(description = "Kotlin multiplatform currency library") {
 	targets {
 		common {
 			dependencies {
-				implementation(kotlinx("serialization-core", "1.0.1"))
+				implementation(kotlinx("serialization-core", "1.1.0-RC"))
 			}
 		}
 
-		darwin()
-		js()
+		darwin {
+			withoutWatchosX64() // https://github.com/Kotlin/kotlinx.serialization/pull/1285
+		}
+		js(KotlinJsCompilerType.BOTH)
 		jvm()
 	}
 }
