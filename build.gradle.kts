@@ -2,7 +2,7 @@ import io.fluidsonic.gradle.*
 import org.jetbrains.kotlin.gradle.plugin.*
 
 plugins {
-	id("io.fluidsonic.gradle") version "1.1.18"
+	id("io.fluidsonic.gradle") version "1.1.21"
 }
 
 fluidLibrary(name = "currency", version = "0.9.4-kotlin-1.5")
