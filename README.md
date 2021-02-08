@@ -19,8 +19,7 @@ Installation
 
 ```kotlin
 dependencies {
-	implementation("io.fluidsonic.currency:fluid-currency:0.9.4-kotlin-1.5") // Kotlin 1.4.30 (language version 1.5)
-	implementation("io.fluidsonic.currency:fluid-currency:0.9.3")            // Kotlin 1.4.*
+	implementation("io.fluidsonic.currency:fluid-currency:0.9.4")
 }
 ```
 
