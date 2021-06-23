@@ -45,7 +45,7 @@ public class CurrencyCode internal constructor(private val value: String) {
 		public fun parseOrNull(string: String): CurrencyCode? =
 			string
 				.takeIf(this::isValidFormat)
-				?.let { CurrencyCode(value = it.toUpperCase()) }
+				?.let { CurrencyCode(value = it.uppercase()) }
 
 
 		private fun isValidFormat(string: String) =
