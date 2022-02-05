@@ -19,7 +19,7 @@ Installation
 
 ```kotlin
 dependencies {
-	implementation("io.fluidsonic.currency:fluid-currency:0.10.1")
+	implementation("io.fluidsonic.currency:fluid-currency:0.11.0")
 }
 ```
 
