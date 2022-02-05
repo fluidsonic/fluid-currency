@@ -2,7 +2,7 @@ import io.fluidsonic.gradle.*
 import org.jetbrains.kotlin.gradle.plugin.*
 
 plugins {
-	id("io.fluidsonic.gradle") version "1.1.23"
+	id("io.fluidsonic.gradle") version "1.1.25"
 }
 
 fluidLibrary(name = "currency", version = "0.10.1")
@@ -11,7 +11,7 @@ fluidLibraryModule(description = "Kotlin multiplatform currency library") {
 	targets {
 		common {
 			dependencies {
-				implementation(kotlinx("serialization-core", "1.2.1"))
+				implementation(kotlinx("serialization-core", "1.3.2"))
 			}
 		}
 
