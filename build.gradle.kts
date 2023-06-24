@@ -1,11 +1,10 @@
 import io.fluidsonic.gradle.*
-import org.jetbrains.kotlin.gradle.plugin.*
 
 plugins {
 	id("io.fluidsonic.gradle") version "1.3.1"
 }
 
-fluidLibrary(name = "currency", version = "0.12.0")
+fluidLibrary(name = "currency", version = "0.13.0")
 
 fluidLibraryModule(description = "Kotlin multiplatform currency library") {
 	targets {
@@ -16,7 +15,7 @@ fluidLibraryModule(description = "Kotlin multiplatform currency library") {
 		}
 
 		darwin()
-		js(KotlinJsCompilerType.BOTH)
+		js()
 		jvm()
 	}
 }
