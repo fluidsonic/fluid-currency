@@ -7,11 +7,6 @@ public class Currency private constructor(
 	public val numericCode: Int,
 ) {
 
-	init {
-		freeze()
-	}
-
-
 	override fun toString(): String =
 		code.toString()
 

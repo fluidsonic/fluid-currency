@@ -15,11 +15,6 @@ import kotlinx.serialization.encoding.*
 @Serializable(CurrencyCodeSerializer::class)
 public class CurrencyCode internal constructor(private val value: String) {
 
-	init {
-		freeze()
-	}
-
-
 	override fun equals(other: Any?): Boolean =
 		this === other || (other is CurrencyCode && value == other.value)
 
