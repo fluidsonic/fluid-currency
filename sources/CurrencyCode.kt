@@ -1,5 +1,6 @@
 package io.fluidsonic.currency
 
+import kotlin.jvm.*
 import kotlinx.serialization.*
 import kotlinx.serialization.descriptors.*
 import kotlinx.serialization.encoding.*
@@ -12,16 +13,9 @@ import kotlinx.serialization.encoding.*
  * - [https://www.iso.org/iso-4217-currency-codes.html]
  * - [https://www.currency-iso.org/en/home/tables/table-a1.html]
  */
+@JvmInline
 @Serializable(CurrencyCodeSerializer::class)
-public class CurrencyCode internal constructor(private val value: String) {
-
-	override fun equals(other: Any?): Boolean =
-		this === other || (other is CurrencyCode && value == other.value)
-
-
-	override fun hashCode(): Int =
-		value.hashCode()
-
+public value class CurrencyCode internal constructor(private val value: String) {
 
 	public fun isValid(): Boolean =
 		Currency.forCodeOrNull(this) != null
@@ -52,8 +46,6 @@ public class CurrencyCode internal constructor(private val value: String) {
 }
 
 
-@OptIn(ExperimentalSerializationApi::class)
-@Serializer(forClass = CurrencyCode::class)
 internal object CurrencyCodeSerializer : KSerializer<CurrencyCode> {
 
 	override val descriptor: SerialDescriptor =
@@ -66,5 +58,10 @@ internal object CurrencyCodeSerializer : KSerializer<CurrencyCode> {
 
 
 	override fun deserialize(decoder: Decoder): CurrencyCode =
-		CurrencyCode.parse(decoder.decodeString())
+		try {
+			CurrencyCode.parse(decoder.decodeString())
+		}
+		catch (e: IllegalStateException) {
+			throw SerializationException(e.message, e)
+		}
 }

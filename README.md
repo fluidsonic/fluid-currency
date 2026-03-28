@@ -3,7 +3,7 @@ fluid-currency
 
 [![Maven Central](https://img.shields.io/maven-central/v/io.fluidsonic.currency/fluid-currency?label=Maven%20Central)](https://search.maven.org/artifact/io.fluidsonic.currency/fluid-currency)
 [![Tests](https://github.com/fluidsonic/fluid-currency/workflows/Tests/badge.svg)](https://github.com/fluidsonic/fluid-currency/actions?workflow=Tests)
-[![Kotlin](https://img.shields.io/badge/Kotlin-1.8.22%20(Darwin,%20JVM,%20JS)-blue.svg)](https://github.com/JetBrains/kotlin/releases/v1.8.22)
+[![Kotlin](https://img.shields.io/badge/Kotlin-2.3.20%20(JVM,%20JS)-blue.svg)](https://github.com/JetBrains/kotlin/releases/v2.3.20)
 [![#fluid-libraries Slack Channel](https://img.shields.io/badge/slack-%23fluid--libraries-543951.svg?label=Slack)](https://kotlinlang.slack.com/messages/C7UDFSVT2/)
 
 Kotlin multiplatform currency library.
@@ -19,7 +19,7 @@ Installation
 
 ```kotlin
 dependencies {
-	implementation("io.fluidsonic.currency:fluid-currency:0.13.0")
+	implementation("io.fluidsonic.currency:fluid-currency:0.14.0")
 }
 ```
 
@@ -27,7 +27,7 @@ Usage
 -----
 
 ```kotlin
-println(Currency.fromCode("EUR")) // EUR
+println(Currency.forCode("EUR")) // EUR
 ```
 
 ### `class Currency`
@@ -46,9 +46,10 @@ val currency = Currency.forCodeOrNull("ABC123") // null if code is invalid (not 
 println(currency) // null
 ```
 
-### `class CurrencyCode`
+### `value class CurrencyCode`
 
-An inline class for ISO 4217 3-letter currency codes (e.g. `EUR` or `USD`).
+A value class for ISO 4217 3-letter currency codes (e.g. `EUR` or `USD`).
+Supports [kotlinx.serialization](https://github.com/Kotlin/kotlinx.serialization) out of the box.
 
 ```kotlin
 val code = CurrencyCode.parse("EUR") // throws if code has invalid format (not three latin letters)
@@ -65,6 +66,15 @@ println(code.isValid()) // false - 'ABC' is not defined by ISO 4217
 ```kotlin
 val code = CurrencyCode.parseOrNull("ABC123") // null if code has invalid format (not three latin letters)
 println(code) // null
+```
+
+### JVM interop
+
+On the JVM, extension functions are provided for converting between this library's `Currency` and `java.util.Currency`:
+
+```kotlin
+val platformCurrency: java.util.Currency = Currency.forCode("EUR").toPlatform()
+val commonCurrency: Currency = platformCurrency.toCommon()
 ```
 
 License

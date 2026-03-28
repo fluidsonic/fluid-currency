@@ -1,9 +1,30 @@
 package io.fluidsonic.currency
 
 
+/**
+ * An ISO 4217 currency with its code, default fraction digits, and numeric code.
+ *
+ * Use [forCode] or [forCodeOrNull] to look up a currency by its code.
+ * Use [all] to get the complete set of defined currencies.
+ *
+ * References:
+ * - [https://www.iso.org/iso-4217-currency-codes.html]
+ * - [https://www.currency-iso.org/en/home/tables/table-a1.html]
+ */
 public class Currency private constructor(
+
+	/** The ISO 4217 3-letter currency code. */
 	public val code: CurrencyCode,
+
+	/**
+	 * The default number of fraction digits used with this currency.
+	 *
+	 * Returns `-1` for currencies that have no minor unit (e.g. precious metals like [XAU] and [XAG],
+	 * or special codes like [XXX]).
+	 */
 	public val defaultFractionDigits: Int,
+
+	/** The ISO 4217 numeric currency code. */
 	public val numericCode: Int,
 ) {
 
@@ -11,8 +32,18 @@ public class Currency private constructor(
 		code.toString()
 
 
+	override fun equals(other: Any?): Boolean =
+		this === other || (other is Currency && code == other.code)
+
+
+	override fun hashCode(): Int =
+		code.hashCode()
+
+
 	public companion object {
 
+		/** The set of all currencies defined by ISO 4217. */
+		// Last verified against ISO 4217 Table A1: 2026-03-28
 		// https://www.currency-iso.org/en/home/tables/table-a1.html
 		public val all: Set<Currency> = hashSetOf(
 			make(code = "AED", defaultFractionDigits = 2, numericCode = 784),
@@ -76,7 +107,7 @@ public class Currency private constructor(
 			make(code = "GYD", defaultFractionDigits = 2, numericCode = 328),
 			make(code = "HKD", defaultFractionDigits = 2, numericCode = 344),
 			make(code = "HNL", defaultFractionDigits = 2, numericCode = 340),
-			make(code = "HRK", defaultFractionDigits = 2, numericCode = 191),
+			make(code = "HRK", defaultFractionDigits = 2, numericCode = 191), // Withdrawn: Croatia adopted EUR on 2023-01-01.
 			make(code = "HTG", defaultFractionDigits = 2, numericCode = 332),
 			make(code = "HUF", defaultFractionDigits = 2, numericCode = 348),
 			make(code = "IDR", defaultFractionDigits = 2, numericCode = 360),
@@ -144,7 +175,8 @@ public class Currency private constructor(
 			make(code = "SEK", defaultFractionDigits = 2, numericCode = 752),
 			make(code = "SGD", defaultFractionDigits = 2, numericCode = 702),
 			make(code = "SHP", defaultFractionDigits = 2, numericCode = 654),
-			make(code = "SLL", defaultFractionDigits = 2, numericCode = 694),
+			make(code = "SLE", defaultFractionDigits = 2, numericCode = 925),
+			make(code = "SLL", defaultFractionDigits = 2, numericCode = 694), // Redenominated: replaced by SLE in 2022.
 			make(code = "SOS", defaultFractionDigits = 2, numericCode = 706),
 			make(code = "SRD", defaultFractionDigits = 2, numericCode = 968),
 			make(code = "SSP", defaultFractionDigits = 2, numericCode = 728),
@@ -169,6 +201,7 @@ public class Currency private constructor(
 			make(code = "UYU", defaultFractionDigits = 2, numericCode = 858),
 			make(code = "UYW", defaultFractionDigits = 4, numericCode = 927),
 			make(code = "UZS", defaultFractionDigits = 2, numericCode = 860),
+			make(code = "VED", defaultFractionDigits = 2, numericCode = 926),
 			make(code = "VES", defaultFractionDigits = 2, numericCode = 928),
 			make(code = "VND", defaultFractionDigits = 0, numericCode = 704),
 			make(code = "VUV", defaultFractionDigits = 0, numericCode = 548),
@@ -200,6 +233,20 @@ public class Currency private constructor(
 		private val allByCode: Map<CurrencyCode, Currency> = all.associateByTo(hashMapOf()) { it.code }
 
 
+		/** Croatian Kuna — withdrawn from ISO 4217 on 2023-01-01 when Croatia adopted the Euro ([EUR]). */
+		@Deprecated("HRK was withdrawn from ISO 4217. Croatia adopted EUR on 2023-01-01.", replaceWith = ReplaceWith("forCode(\"EUR\")"))
+		public val HRK: Currency get() = forCode("HRK")
+
+
+		/** Old Sierra Leonean Leone — redenominated in 2022. Use [SLE] for the new Sierra Leonean Leone. */
+		@Deprecated("SLL was redenominated. Use SLE (new Sierra Leonean Leone) instead.", replaceWith = ReplaceWith("SLE"))
+		public val SLL: Currency get() = forCode("SLL")
+
+
+		/** New Sierra Leonean Leone, replacing the old Leone ([SLL]) after redenomination in 2022. */
+		public val SLE: Currency get() = forCode("SLE")
+
+
 		private fun make(code: String, defaultFractionDigits: Int, numericCode: Int): Currency =
 			Currency(
 				code = CurrencyCode(code),
@@ -208,18 +255,24 @@ public class Currency private constructor(
 			)
 
 
+		/** Returns the [Currency] for the given [code], or throws if no such currency is defined. */
 		public fun forCode(code: CurrencyCode): Currency =
 			forCodeOrNull(code) ?: error("Invalid ISO 4217 currency code: $code")
 
 
+		/** Returns the [Currency] for the given [code], or `null` if no such currency is defined. */
 		public fun forCodeOrNull(code: CurrencyCode): Currency? =
 			allByCode[code]
 
 
-		public fun forCode(code: String): Currency =
-			forCodeOrNull(CurrencyCode.parse(code)) ?: error("Invalid ISO 4217 currency code: $code")
+		/** Returns the [Currency] for the given [code] string, or throws if the format is invalid or no such currency is defined. */
+		public fun forCode(code: String): Currency {
+			val currencyCode = CurrencyCode.parse(code)
+			return forCodeOrNull(currencyCode) ?: error("Invalid ISO 4217 currency code: $currencyCode")
+		}
 
 
+		/** Returns the [Currency] for the given [code] string, or `null` if the format is invalid or no such currency is defined. */
 		public fun forCodeOrNull(code: String): Currency? =
 			CurrencyCode.parseOrNull(code)?.let(::forCodeOrNull)
 	}
