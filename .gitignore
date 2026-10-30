@@ -12,3 +12,5 @@
 build
 out
 .claude/worktrees/
+local.properties
+.kotlin

@@ -1,5 +1,21 @@
 # Changelog
 
+## [Unreleased]
+
+### Added
+
+- Kotlin/Wasm target (`wasmJs`)
+- Kotlin/Native targets: Android Native, iOS, Linux, macOS, tvOS, watchOS and Windows (mingwX64), restoring the Darwin targets dropped in 0.14.0 (except the deprecated x64 macOS, tvOS and watchOS targets)
+
+### Changed
+
+- Replaced the fluid-gradle plugin with a plain Kotlin Multiplatform Gradle build (version catalog, standard `src/<sourceSet>/kotlin` layout)
+- Upgraded Gradle wrapper from 9.4.1 to 9.8.2
+- Release workflow publishing to Maven Central on version tags; every publication now includes a javadoc jar
+- Upgraded Kotlin from 2.3.20 to 2.4.21
+- JVM artifact now targets Java 8 bytecode instead of Java 21, matching kotlinx-serialization and the Kotlin standard library
+- Updated kotlinx-serialization-core from 1.10.0 to 1.12.0
+
 ## [0.14.0] - 2026-03-28
 
 ### Added
